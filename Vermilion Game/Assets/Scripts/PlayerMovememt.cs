@@ -5,14 +5,16 @@ using UnityEngine;
 public class PlayerMovememt : MonoBehaviour
 {
 
-    float walkSpeed = 1f;
-    float sprintMulti = 3f;
+    Rigidbody2D rb;
+
+    [SerializeField] private float walkSpeed = 0.2f;
+    [SerializeField] private float sprintMulti = 3f;
     bool isSprinting = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -20,6 +22,7 @@ public class PlayerMovememt : MonoBehaviour
     {
         Sprint();
         Movement();
+        Rotate();
 
     }
 
@@ -31,12 +34,13 @@ public class PlayerMovememt : MonoBehaviour
 
         if (isSprinting)
         {
-            transform.position = new Vector2(transform.position.x + horizontal * walkSpeed * sprintMulti, transform.position.y + vertical * walkSpeed * sprintMulti);
+            rb.MovePosition(new Vector2(transform.position.x + horizontal * walkSpeed * sprintMulti, transform.position.y + vertical * walkSpeed * sprintMulti));
         }
         else
         {
-            transform.position = new Vector2(transform.position.x + horizontal * walkSpeed, transform.position.y + vertical * walkSpeed);
+            rb.MovePosition(new Vector2(transform.position.x + horizontal * walkSpeed, transform.position.y + vertical * walkSpeed));
         }
+
     }
 
     private void Sprint()
@@ -45,9 +49,14 @@ public class PlayerMovememt : MonoBehaviour
         {
             isSprinting = true;
         }
-        else
-        {
+        else if(Input.GetKeyUp(KeyCode.LeftShift))
+        {   
             isSprinting = false;
         }
+        
+    }
+    private void Rotate()
+    {
+        Debug.Log(rb.velocity);
     }
 }
