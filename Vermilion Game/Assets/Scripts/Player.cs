@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
@@ -25,7 +26,10 @@ public class Player : MonoBehaviour
     // Aim rotation
     public Transform aim;
     bool isWalking = false;
-    
+
+    // Player health
+    public float health, maxHealth = 10f;
+
 
     // Start is called before the first frame update
     void Start()
@@ -71,5 +75,14 @@ public class Player : MonoBehaviour
         input.y = Input.GetAxisRaw("Vertical");
 
         input.Normalize();
+    }
+
+    public void TakeDamage(float damage)
+    {
+        health -= damage;
+        if (health <= 0)
+        {
+            Debug.Log("Died");
+        }
     }
 }

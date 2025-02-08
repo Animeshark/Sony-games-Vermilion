@@ -126,6 +126,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed6dfe20ec682af4c95900301a7f483a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: 0
+  maxHealth: 3
+  damage: 1
+  attackRange: 5
+  attackCooldown: 5
   moveSpeed: 2
 --- !u!70 &3090995725751861865
 CapsuleCollider2D:
