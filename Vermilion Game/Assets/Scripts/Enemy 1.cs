@@ -7,9 +7,14 @@ public class Enemy1 : MonoBehaviour
     // Start is called before the first frame update
 
     [SerializeField] float moveSpeed = 2f;
+    [SerializeField] float health, maxHealth = 3f;
+    [SerializeField] float damage = 1f;
+
     Rigidbody2D rb;
     Transform target;
     Vector2 moveDirection;
+    
+
 
     private void Awake()
     {
@@ -18,6 +23,7 @@ public class Enemy1 : MonoBehaviour
     void Start()
     {
         target = GameObject.Find("Player").transform;
+        health = maxHealth;
     }
 
     // Update is called once per frame
@@ -27,14 +33,20 @@ public class Enemy1 : MonoBehaviour
         {
             Vector3 direction = (target.position - transform.position).normalized;
             moveDirection = direction;
-
-            float angle = Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg;
-            rb.rotation = angle;
         }
     }
 
     private void FixedUpdate()
     {
-        rb.velocity = new Vector2(moveDirection.x, moveDirection.y);
+        rb.velocity = new Vector2(moveDirection.x, moveDirection.y) * moveSpeed;
+    }
+
+    public void TakeDamage(float damage)
+    {
+        health -= damage;
+        if (health <= 0) 
+        {
+            Destroy(gameObject);
+        }
     }
 }
