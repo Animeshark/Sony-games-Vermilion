@@ -28,20 +28,25 @@ public class Player : MonoBehaviour
     bool isWalking = false;
 
     // Player health
-    public float health, maxHealth = 10f;
+    public float maxHealth = 10f;
+    private float health;
+
+    [SerializeField] float colitionCooldown;
+    private float colitionCooldownTimer = 0f;
 
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        health = maxHealth;
     }
 
     // Update is called once per frame
     void Update()
     {
         ProccessInputs();
-
+        if (colitionCooldownTimer > 0) colitionCooldownTimer -= Time.deltaTime * 1;
     }
 
     private void Sprint()
@@ -79,10 +84,14 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        health -= damage;
-        if (health <= 0)
+        if (colitionCooldownTimer <= 0)
         {
-            Debug.Log("Died");
+            health -= damage;
+            if (health <= 0)
+            {
+                Debug.Log("Died");
+            }
+            colitionCooldownTimer = colitionCooldown;
         }
     }
 }

@@ -25,6 +25,8 @@ public class Enemy1 : MonoBehaviour
 
     [SerializeField] float dashSpeed;
 
+
+
     // movement
     Rigidbody2D rb;
     Player target;
@@ -47,6 +49,32 @@ public class Enemy1 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Attack();
+    }
+
+    private void FixedUpdate()
+    {
+        if (!isAttacking) rb.velocity = moveDirection * moveSpeed;
+    }
+
+    private Vector3 findTarget(Transform target)
+    {
+        Vector3 direction = (target.position - transform.position).normalized;
+        return direction;
+    }
+
+    public void TakeDamage(float damage)
+    {
+        health -= damage;
+        if (health <= 0) 
+        {
+            Destroy(gameObject);
+        }
+    }
+    
+    public void Attack()
+    {
+
         //Scout
         if (target || !isAttacking)
         {
@@ -54,12 +82,13 @@ public class Enemy1 : MonoBehaviour
 
             if (moveDirection.sqrMagnitude <= attackRange)
             {
-                
+
                 if (attackCooldownPassed >= attackCooldown)
                 {
                     //Begin attack
                     isAttacking = true;
                     moveDirection = Vector2.zero;
+                    rb.velocity = Vector2.zero;
 
                 }
                 else
@@ -92,43 +121,16 @@ public class Enemy1 : MonoBehaviour
             else
             {
                 //End attack
+                attackDurPassed = 0;
                 attackCooldownPassed = 0;
                 isAttacking = false;
             }
 
         }
-
-    }
-
-    private void FixedUpdate()
-    {
-        if (!isAttacking) rb.velocity = new Vector2(moveDirection.x, moveDirection.y) * moveSpeed;
-    }
-
-    private Vector3 findTarget(Transform target)
-    {
-        Vector3 direction = (target.position - transform.position).normalized;
-        return direction;
-    }
-
-    public void TakeDamage(float damage)
-    {
-        health -= damage;
-        if (health <= 0) 
-        {
-            Destroy(gameObject);
-        }
-    }
-    
-    public float Attack()
-    {
-        
-        findTarget(target.transform);
-        return damage;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        target.TakeDamage(damage);
+            target.TakeDamage(damage);
     }
 }
