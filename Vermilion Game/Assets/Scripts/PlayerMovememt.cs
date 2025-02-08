@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class PlayerMovememt : MonoBehaviour
@@ -7,9 +8,13 @@ public class PlayerMovememt : MonoBehaviour
 
     Rigidbody2D rb;
 
+    Vector2 input;
+
     [SerializeField] private float walkSpeed = 0.2f;
-    [SerializeField] private float sprintMulti = 3f;
-    bool isSprinting = false;
+    [SerializeField] private float sprint = 2f;
+    [SerializeField] private Sprite[] faceing;
+    int isSprinting = 0;
+
 
     // Start is called before the first frame update
     void Start()
@@ -22,41 +27,33 @@ public class PlayerMovememt : MonoBehaviour
     {
         Sprint();
         Movement();
-        Rotate();
 
     }
 
-    private void Movement()
+    private Vector2 Movement()
     {
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
-        
+        input.x = Input.GetAxisRaw("Horizontal");
+        input.y = Input.GetAxisRaw("Vertical");
 
-        if (isSprinting)
-        {
-            rb.MovePosition(new Vector2(transform.position.x + horizontal * walkSpeed * sprintMulti, transform.position.y + vertical * walkSpeed * sprintMulti));
-        }
-        else
-        {
-            rb.MovePosition(new Vector2(transform.position.x + horizontal * walkSpeed, transform.position.y + vertical * walkSpeed));
-        }
+        input.Normalize();
 
+        return input;
     }
 
     private void Sprint()
     {
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            isSprinting = true;
+            isSprinting = 1;
         }
         else if(Input.GetKeyUp(KeyCode.LeftShift))
         {   
-            isSprinting = false;
+            isSprinting = 0;
         }
         
     }
-    private void Rotate()
+    private void FixedUpdate()
     {
-        Debug.Log(rb.velocity);
+        rb.velocity = input * (walkSpeed + sprint * isSprinting);
     }
 }
