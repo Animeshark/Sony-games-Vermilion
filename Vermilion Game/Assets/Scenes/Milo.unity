@@ -255,9 +255,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkSpeed: 2
-  sprint: 2
+  sprint: 3
   faceing: []
   aim: {fileID: 0}
+  maxHealth: 10
+  colitionCooldown: 0.2
 --- !u!50 &674436253
 Rigidbody2D:
   serializedVersion: 4

@@ -7,6 +7,7 @@ public class Enemy1 : MonoBehaviour
 {
     // Start is called before the first frame update
 
+
     // attack
 
     public float health, maxHealth = 3f;
@@ -44,6 +45,8 @@ public class Enemy1 : MonoBehaviour
         target = GameObject.Find("Player").GetComponent<Player>();
         attackCooldownPassed = attackCooldown;
         health = maxHealth;
+
+        attackCooldownPassed = UnityEngine.Random.Range(1, 60) / 100;
     }
 
     // Update is called once per frame
