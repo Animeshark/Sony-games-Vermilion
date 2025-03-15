@@ -20,7 +20,6 @@ public class Player : MonoBehaviour
 
     // Visual rotation
     [SerializeField] private Sprite[] faceing;
-    private Vector2 lastMoveDirection;
     private bool facingleft = false;
 
     // Aim rotation
@@ -34,10 +33,16 @@ public class Player : MonoBehaviour
     [SerializeField] float colitionCooldown;
     private float colitionCooldownTimer = 0f;
 
+    // Attack
+    [SerializeField] float arrowSpeed = 1f;
+    public float damage = 1f;
+
+    Arrow arrow;
 
     // Start is called before the first frame update
     void Start()
     {
+        arrow = new Arrow();
         rb = GetComponent<Rigidbody2D>();
         health = maxHealth;
     }
@@ -46,6 +51,13 @@ public class Player : MonoBehaviour
     void Update()
     {
         ProccessInputs();
+
+
+        input.Normalize();
+        rb.velocity = input * (walkSpeed + sprint * isSprinting);
+
+
+
         if (colitionCooldownTimer > 0) colitionCooldownTimer -= Time.deltaTime * 1;
     }
 
@@ -61,16 +73,6 @@ public class Player : MonoBehaviour
         }
         
     }
-    private void FixedUpdate()
-    {   
-        
-        rb.velocity = input * (walkSpeed + sprint * isSprinting);
-        if (isWalking)
-        {
-            Vector3 vector3 = Vector3.left * input.x + Vector3.down * input.y;
-            aim.rotation = Quaternion.LookRotation(Vector3.forward, vector3);
-        }
-    }
 
     void ProccessInputs()
     {
@@ -79,7 +81,17 @@ public class Player : MonoBehaviour
         input.x = Input.GetAxisRaw("Horizontal");
         input.y = Input.GetAxisRaw("Vertical");
 
-        input.Normalize();
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            shoot();
+
+        }
+
+        if (isWalking)
+        {
+            Vector3 vector3 = Vector3.left * input.x + Vector3.down * input.y;
+
+        }
     }
 
     public void TakeDamage(float damage)
@@ -93,5 +105,12 @@ public class Player : MonoBehaviour
             }
             colitionCooldownTimer = colitionCooldown;
         }
+    }
+
+    void shoot()
+    {
+        Vector2 direction = aim.transform.forward;
+        Instantiate(arrow, transform.position, transform.rotation);
+        
     }
 }
