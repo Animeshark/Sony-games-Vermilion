@@ -51,8 +51,6 @@ public class Player : MonoBehaviour
     void Update()
     {
         ProccessInputs();
-
-
         input.Normalize();
         rb.velocity = input * (walkSpeed + sprint * isSprinting);
 
@@ -109,8 +107,6 @@ public class Player : MonoBehaviour
 
     void shoot()
     {
-        Vector2 direction = aim.transform.forward;
-        Instantiate(arrow, transform.position, transform.rotation);
-        
+        Instantiate(arrow, aim.transform.position, aim.transform.rotation);
     }
 }

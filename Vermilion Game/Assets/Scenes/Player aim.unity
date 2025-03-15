@@ -330,7 +330,7 @@ MonoBehaviour:
   walkSpeed: 2
   sprint: 3
   faceing: []
-  aim: {fileID: 0}
+  aim: {fileID: 2069573054}
   maxHealth: 10
   colitionCooldown: 0.2
   arrowSpeed: 1
