@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,8 +6,8 @@ using UnityEngine;
 public class Arrow : MonoBehaviour
 {
     Rigidbody2D rb;
-    private float movespeed;
-    private float damage;
+    [SerializeField] private float movespeed;
+    [SerializeField] private float damage;
 
     // Start is called before the first frame update
     void Start()
@@ -23,5 +24,6 @@ public class Arrow : MonoBehaviour
     void move()
     {
         rb.velocity = transform.forward * movespeed;
+        Debug.Log(transform.forward);
     }
 }
