@@ -46,6 +46,14 @@ public class Player : MonoBehaviour
     void Update()
     {
         ProccessInputs();
+
+        rb.velocity = input * (walkSpeed + sprint * isSprinting);
+        if (isWalking)
+        {
+            Vector3 vector3 = Vector3.left * input.x + Vector3.down * input.y;
+            aim.rotation = Quaternion.LookRotation(Vector3.forward, vector3);
+        }
+
         if (colitionCooldownTimer > 0) colitionCooldownTimer -= Time.deltaTime * 1;
     }
 
@@ -60,16 +68,6 @@ public class Player : MonoBehaviour
             isSprinting = 0;
         }
         
-    }
-    private void FixedUpdate()
-    {   
-        
-        rb.velocity = input * (walkSpeed + sprint * isSprinting);
-        if (isWalking)
-        {
-            Vector3 vector3 = Vector3.left * input.x + Vector3.down * input.y;
-            aim.rotation = Quaternion.LookRotation(Vector3.forward, vector3);
-        }
     }
 
     void ProccessInputs()
