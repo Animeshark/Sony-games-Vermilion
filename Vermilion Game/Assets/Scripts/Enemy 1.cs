@@ -30,7 +30,7 @@ public class Enemy1 : MonoBehaviour
 
     // movement
     Rigidbody2D rb;
-    Player target;
+    public Player target;
     [SerializeField] float moveSpeed = 2f;
     Vector2 moveDirection;
     
@@ -40,6 +40,7 @@ public class Enemy1 : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
     }
+    
     void Start()
     {
         target = GameObject.Find("Player").GetComponent<Player>();
@@ -71,7 +72,7 @@ public class Enemy1 : MonoBehaviour
         health -= damage;
         if (health <= 0) 
         {
-            Destroy(gameObject);
+            Destroy(this.gameObject);
         }
     }
     
