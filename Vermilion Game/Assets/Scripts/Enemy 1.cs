@@ -120,6 +120,16 @@ public class Enemy1 : MonoBehaviour
                 //Dash
                 // Uses direction from last attackTimePassed                   Gives the slowing movement affect
                 rb.velocity = new Vector2(dashDirection.x, dashDirection.y) * (attackPhase2Dur - attackDurPassed) * dashSpeed;
+                GetComponent<Animator>().SetBool("isDashing", true);
+                if(dashDirection.x < 0)
+                {
+                    GetComponent<SpriteRenderer>().flipX = true;
+                }
+                else
+                {
+                    GetComponent<SpriteRenderer>().flipX = false;
+                }
+
             }
             //Phase 3 (after 3 seconds)
             else
@@ -128,6 +138,7 @@ public class Enemy1 : MonoBehaviour
                 attackDurPassed = 0;
                 attackCooldownPassed = 0;
                 isAttacking = false;
+                GetComponent<Animator>().SetBool("isDashing", false);
             }
 
         }
