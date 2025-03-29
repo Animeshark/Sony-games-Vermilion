@@ -14,7 +14,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float walkSpeed = 2f;
     [SerializeField] private float sprint = 2f;
     int isSprinting = 0;
-    bool canWalk = true;
+    bool isWalking = true;
     Vector2 moveUnit;
     Vector2 lastDirection;
 
@@ -46,11 +46,8 @@ public class Player : MonoBehaviour
     private void Update()
     {
         check();
-
-        if (canWalk)
-        {
-            move();
-        }
+        move();
+        
         if (!isShooting)
         {
             rotate();
@@ -76,6 +73,11 @@ public class Player : MonoBehaviour
         if(!moveUnit.Equals(new Vector2(0, 0)))
         {
             lastDirection = moveUnit;
+            isWalking = true;
+        }
+        else
+        {
+            isWalking = false;
         }
 
         moveUnit.Normalize();
@@ -98,37 +100,51 @@ public class Player : MonoBehaviour
     private void rotate()
     {
 
-        if(lastDirection.Equals(new Vector2(1, 0)))
+        GetComponent<Animator>().SetBool("movingDown", false);
+        GetComponent<Animator>().SetBool("movingSideways", false);
+        GetComponent<Animator>().SetBool("movingUp", false);
+
+        if (lastDirection.Equals(new Vector2(1, 0)))
         {
             aim.rotation = Quaternion.Euler(0, 0, -90);
+            GetComponent<Animator>().SetBool("movingSideways", isWalking);
+            GetComponent<SpriteRenderer>().flipX = false;
         }
         else if (lastDirection.Equals(new Vector2(-1, 0)))
         {
             aim.rotation = Quaternion.Euler(0, 0, 90);
+            GetComponent<Animator>().SetBool("movingSideways", isWalking);
+            GetComponent<SpriteRenderer>().flipX = true;
         }
         else if (lastDirection.Equals(new Vector2(0, 1)))
         {
             aim.rotation = Quaternion.Euler(0, 0, 0);
+            GetComponent<Animator>().SetBool("movingUp", isWalking);
         }
         else if (lastDirection.Equals(new Vector2(0, -1)))
         {
             aim.rotation = Quaternion.Euler(0, 0, 180);
+            GetComponent<Animator>().SetBool("movingDown", isWalking);
         }
         else if (lastDirection.Equals(new Vector2(1, 1)))
         {
             aim.rotation = Quaternion.Euler(0, 0, -45);
+            GetComponent<Animator>().SetBool("movingUp", isWalking);
         }
         else if (lastDirection.Equals(new Vector2(-1, 1)))
         {
             aim.rotation = Quaternion.Euler(0, 0, 45);
+            GetComponent<Animator>().SetBool("movingUp", isWalking);
         }
         else if (lastDirection.Equals(new Vector2(-1, -1)))
         {
             aim.rotation = Quaternion.Euler(0, 0, 135);
+            GetComponent<Animator>().SetBool("movingDown", isWalking);
         }
         else if (lastDirection.Equals(new Vector2(1, -1)))
         {
-            aim.rotation = Quaternion.Euler(0, 0, 135);
+            aim.rotation = Quaternion.Euler(0, 0, -135);
+            GetComponent<Animator>().SetBool("movingDown", isWalking);
         }
     }
 
