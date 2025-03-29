@@ -100,35 +100,35 @@ public class Player : MonoBehaviour
 
         if(lastDirection.Equals(new Vector2(1, 0)))
         {
-            aim.rotation = Quaternion.Euler(0, 0, 0);
+            aim.rotation = Quaternion.Euler(0, 0, -90);
         }
         else if (lastDirection.Equals(new Vector2(-1, 0)))
         {
-            aim.rotation = Quaternion.Euler(0, 0, 180);
+            aim.rotation = Quaternion.Euler(0, 0, 90);
         }
         else if (lastDirection.Equals(new Vector2(0, 1)))
         {
-            aim.rotation = Quaternion.Euler(0, 0, 90);
+            aim.rotation = Quaternion.Euler(0, 0, 0);
         }
         else if (lastDirection.Equals(new Vector2(0, -1)))
         {
-            aim.rotation = Quaternion.Euler(0, 0, -90);
+            aim.rotation = Quaternion.Euler(0, 0, 180);
         }
         else if (lastDirection.Equals(new Vector2(1, 1)))
         {
-            aim.rotation = Quaternion.Euler(0, 0, 45);
+            aim.rotation = Quaternion.Euler(0, 0, -45);
         }
         else if (lastDirection.Equals(new Vector2(-1, 1)))
         {
-            aim.rotation = Quaternion.Euler(0, 0, 135);
+            aim.rotation = Quaternion.Euler(0, 0, 45);
         }
         else if (lastDirection.Equals(new Vector2(-1, -1)))
         {
-            aim.rotation = Quaternion.Euler(0, 0, -135);
+            aim.rotation = Quaternion.Euler(0, 0, 135);
         }
         else if (lastDirection.Equals(new Vector2(1, -1)))
         {
-            aim.rotation = Quaternion.Euler(0, 0, -45);
+            aim.rotation = Quaternion.Euler(0, 0, 135);
         }
     }
 
