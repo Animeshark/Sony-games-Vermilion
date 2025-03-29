@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 
 public class Arrow : MonoBehaviour
@@ -13,6 +14,7 @@ public class Arrow : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+
     }
 
     // Update is called once per frame
@@ -23,7 +25,6 @@ public class Arrow : MonoBehaviour
 
     void move()
     {
-        rb.velocity = transform.forward * movespeed;
-        Debug.Log(transform.forward);
+        rb.velocity = transform.right * movespeed;
     }
 }

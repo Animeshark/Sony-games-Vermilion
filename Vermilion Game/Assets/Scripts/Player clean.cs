@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -15,23 +16,23 @@ public class Playerclean : MonoBehaviour
     int isSprinting = 0;
     bool canWalk = true;
     Vector2 moveUnit;
-
-    // Timer
-    private float timer = 0f;
-    private float colStart = 0f; // time at the colition
+    Vector2 lastDirection;
 
     // Battle
     [SerializeField] float maxHealth = 10f;
     public float health;
 
     [SerializeField] float hitInvinsibility;
+    private float hitTimer = 0;
 
-    private bool isShoting = false;
+    private bool isShooting = false;
     public Transform aim;
+    
 
     public Arrow arrowPrefab;
-    [SerializeField] private float shootCooldown;
-    [SerializeField] private float shootStart;
+    private float shootTimer = 0;
+    [SerializeField] private float shootDelay;
+
 
     
 
@@ -44,12 +45,13 @@ public class Playerclean : MonoBehaviour
 
     private void Update()
     {
-        
+        check();
+
         if (canWalk)
         {
             move();
         }
-        if (!isShoting)
+        if (!isShooting)
         {
             rotate();
         }
@@ -57,11 +59,89 @@ public class Playerclean : MonoBehaviour
         {
             attack();
         }
-
-        timer += Time.deltaTime;
+        if (shootTimer > 0)
+        {
+            shootTimer -= Time.deltaTime * 1;
+        }
+        if (hitTimer > 0)
+        {
+            hitTimer -= Time.deltaTime * 1;
+        }
     }
 
     private void move()
+    {
+        moveUnit.x = Input.GetAxisRaw("Horizontal");
+        moveUnit.y = Input.GetAxisRaw("Vertical");
+        if(!moveUnit.Equals(new Vector2(0, 0)))
+        {
+            lastDirection = moveUnit;
+        }
+
+        moveUnit.Normalize();
+
+        rb.velocity = moveUnit * (walkSpeed + sprint * isSprinting);
+    }
+    public void TakeDamage(float damage)
+    {
+        if (hitTimer <= 0)
+        {  
+            health -= damage;
+            if (health <= 0)
+            {
+                Debug.Log("Died");
+            }
+            hitTimer = hitInvinsibility;
+        }
+    }
+    
+    private void rotate()
+    {
+
+        if(lastDirection.Equals(new Vector2(1, 0)))
+        {
+            aim.rotation = Quaternion.Euler(0, 0, 0);
+        }
+        else if (lastDirection.Equals(new Vector2(-1, 0)))
+        {
+            aim.rotation = Quaternion.Euler(0, 0, 180);
+        }
+        else if (lastDirection.Equals(new Vector2(0, 1)))
+        {
+            aim.rotation = Quaternion.Euler(0, 0, 90);
+        }
+        else if (lastDirection.Equals(new Vector2(0, -1)))
+        {
+            aim.rotation = Quaternion.Euler(0, 0, -90);
+        }
+        else if (lastDirection.Equals(new Vector2(1, 1)))
+        {
+            aim.rotation = Quaternion.Euler(0, 0, 45);
+        }
+        else if (lastDirection.Equals(new Vector2(-1, 1)))
+        {
+            aim.rotation = Quaternion.Euler(0, 0, 135);
+        }
+        else if (lastDirection.Equals(new Vector2(-1, -1)))
+        {
+            aim.rotation = Quaternion.Euler(0, 0, -135);
+        }
+        else if (lastDirection.Equals(new Vector2(1, -1)))
+        {
+            aim.rotation = Quaternion.Euler(0, 0, -45);
+        }
+    }
+
+    private void attack()
+    {
+        if (shootTimer <= 0)
+        {
+            Instantiate(arrowPrefab, aim.position, aim.rotation);
+            shootTimer = shootDelay;
+        }
+    }
+
+    private void check()
     {
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
@@ -71,38 +151,13 @@ public class Playerclean : MonoBehaviour
         {
             isSprinting = 0;
         }
-
-        moveUnit.x = Input.GetAxisRaw("Horizontal");
-        moveUnit.y = Input.GetAxisRaw("Vertical");
-        moveUnit.Normalize();
-
-        rb.velocity = moveUnit * (walkSpeed + sprint * isSprinting);
-    }
-    public void TakeDamage(float damage)
-    {
-        if (timer - colStart >= hitInvinsibility)
-        {  
-            health -= damage;
-            if (health <= 0)
-            {
-                Debug.Log("Died");
-            }
-            colStart = timer;
-        }
-    }
-    
-    private void rotate()
-    {
-        float deg = Mathf.Atan2(moveUnit.y, moveUnit.x);
-        aim.rotation = Quaternion.Euler(0, 0, deg); // rotates the aim
-    }
-
-    private void attack()
-    {
-        if (timer - shootStart >= shootCooldown)
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            Instantiate(arrowPrefab, aim.position, aim.rotation);
-            shootStart = timer;
+            isShooting = true;
+        }
+        else if (Input.GetKeyUp(KeyCode.E))
+        {
+            isShooting = false;
         }
     }
 }
