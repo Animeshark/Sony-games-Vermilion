@@ -15,7 +15,7 @@ public class Enemy1 : MonoBehaviour
 
     [SerializeField] float attackRange = 5f;
     [SerializeField] float attackCooldown = 5f;
-    float attackCooldownPassed = 0f;
+    float attackCooldownPassed = 0;
     bool isAttacking = false;
     
 
@@ -47,7 +47,7 @@ public class Enemy1 : MonoBehaviour
         attackCooldownPassed = attackCooldown;
         health = maxHealth;
 
-        attackCooldownPassed = UnityEngine.Random.Range(0f, 3f);
+        attackCooldownPassed = UnityEngine.Random.Range(1, 60) / 100;
     }
 
     // Update is called once per frame
@@ -138,7 +138,7 @@ public class Enemy1 : MonoBehaviour
             {
                 //End attack
                 attackDurPassed = 0;
-                attackCooldownPassed = UnityEngine.Random.Range(0f, 3f);
+                attackCooldownPassed = 0;
                 isAttacking = false;
                 GetComponent<Animator>().SetBool("isDashing", false);
             }
