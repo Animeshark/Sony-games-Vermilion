@@ -32,7 +32,7 @@ public class Arrow : MonoBehaviour
 
     void move()
     {
-        rb.velocity = transform.right * movespeed;
+        rb.velocity = transform.up * movespeed;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
