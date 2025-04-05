@@ -22,10 +22,7 @@ public class battle : MonoBehaviour
         {
             confiner.m_BoundingShape2D = mapBoundry;
             updatePlayerPosistion(collision.gameObject);
-            
-
-
-            summonEnemies();
+            StartCoroutine(summonEnemies());
         }
     }
 
@@ -34,11 +31,14 @@ public class battle : MonoBehaviour
         Player.transform.position = newPos;
     }
 
-    private void summonEnemies()
+    private IEnumerator summonEnemies()
     {
+        yield return new WaitForSeconds(4);
+
         for (int i = 0; i < 5; i++)
         {
-            
+            yield return new WaitForSeconds(0.2f);
+            Instantiate(enemyPre,new Vector3(newPos.x - 10 + 5 * i, newPos.y + 6), Quaternion.identity);
         }
     }
 }
