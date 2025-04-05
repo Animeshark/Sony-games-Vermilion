@@ -72,7 +72,9 @@ public class Enemy1 : MonoBehaviour
         health -= damage;
         if (health <= 0) 
         {
+            GameObject.Find("Manager").GetComponent<EndScreen>().EnemyDefeated();
             Destroy(this.gameObject);
+
         }
     }
     

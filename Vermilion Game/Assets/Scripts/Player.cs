@@ -33,7 +33,7 @@ public class Player : MonoBehaviour
     private float shootTimer = 0;
     [SerializeField] private float shootDelay;
 
-
+    public EndScreen EndScreen;
     
 
 
@@ -91,7 +91,7 @@ public class Player : MonoBehaviour
             health -= damage;
             if (health <= 0)
             {
-                Debug.Log("Died");
+                EndScreen.DisplayEndScreen(false);
             }
             hitTimer = hitInvinsibility;
         }
